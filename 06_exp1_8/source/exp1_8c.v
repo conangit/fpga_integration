@@ -1,5 +1,5 @@
 /*
-时序步骤
+时序循环
 
 for(x = 0; x <10; x++)
 {
@@ -44,7 +44,8 @@ module exp1_8c
                     if(x == c1)
                     begin
                         x <= x + 8'd10;
-                        act2 <= (x != 100-1) ? act2 + 1'b1 : act2;
+                        // act2 <= (x != 101-1) ? act2 + 1'b1 : act2; //控制act2什么时候递增,什么时候停止
+                        act2 <= act2 + 1'b1;
                     end
                     
                     if(y+1 == c1)
