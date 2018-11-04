@@ -29,6 +29,7 @@ module tx_module_tb();
     wire tx_done;
     wire tx_pin;
     
+    /*
     tx_module_before u1
     (
         .clk(clk),
@@ -38,8 +39,9 @@ module tx_module_tb();
         .tx_done(tx_done),
         .tx_pin(tx_pin)
     );
+    */
     
-    /*
+    
     tx_module #(.BPS(BPS_50MHz_115200)) u2
     (
         .clk(clk),
@@ -49,7 +51,7 @@ module tx_module_tb();
         .tx_done(tx_done),
         .tx_pin(tx_pin)
     );
-    */
+    
     
     /*****************/
 
