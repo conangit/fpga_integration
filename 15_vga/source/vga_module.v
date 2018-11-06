@@ -26,7 +26,7 @@ module vga_module
         .c2(c2)
     );
     
-    parameter Delay_N = 4'd2;
+    parameter Delay_N = 4'd3;
     reg [Delay_N-1:0] bypass_h;
     reg [Delay_N-1:0] bypass_v;
     
@@ -101,13 +101,20 @@ module vga_module
     );
     
     /****************************************************/
-    
+    /*
     rom_module rom
     (
         .clk(clk),
         .rst_n(rst_n),
         .rom_addr(rom_addr),
         .rom_data(rom_data)
+    );
+    */
+    
+    rom_ip rom (
+        .clka(clk),         // input clka
+        .addra(rom_addr),   // input [10 : 0] addra
+        .douta(rom_data)    // output [7 : 0] douta
     );
     
     /****************************************************/

@@ -15,10 +15,10 @@ module vga_top_module
     
     pll_ip pll
     (
-    
-    
+        .CLK_IN1(clk),
+        .CLK_OUT1(clk_40MHz),
+        .RESET(~rst_n)
     );
-    
     
     
     wire [2:0] rgb;
@@ -32,9 +32,9 @@ module vga_top_module
         .rgb(rgb)
     );
     
-    assign Red_Sig   = {5{rgb[2]};
-    assign Green_Sig = {6{rgb[1]};
-    assign Blue_Sig  = {5{rgb[0]};
+    assign Red_Sig   = {5{rgb[2]}};
+    assign Green_Sig = {6{rgb[1]}};
+    assign Blue_Sig  = {5{rgb[0]}};
     
     
     
