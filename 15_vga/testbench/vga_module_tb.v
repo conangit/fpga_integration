@@ -38,7 +38,7 @@ module vga_module_tb();
         .c2(c2)
     );
     
-    parameter Delay_N = 4'd7;
+    parameter Delay_N = 4'd2;
     reg [Delay_N-1:0] bypass_h;
     reg [Delay_N-1:0] bypass_v;
     
@@ -72,7 +72,7 @@ module vga_module_tb();
     
     /****************************************************/
     //步骤形式 N=7
-    /*
+    
     vga_control_1 u2
     (
         .clk(clk),
@@ -83,7 +83,7 @@ module vga_module_tb();
         .rom_addr(rom_addr),
         .rom_data(rom_data)
     );
-    */
+    
     /****************************************************/
     //流水线形式(各步骤封装成模块) N=2
     /*
@@ -100,7 +100,7 @@ module vga_module_tb();
     */
     /****************************************************/
     //流水线形式(各步骤写在一个过程块形式) N=2
-    
+    /*
     vga_control_3 u4
     (
         .clk(clk),
@@ -111,7 +111,7 @@ module vga_module_tb();
         .rom_addr(rom_addr),
         .rom_data(rom_data)
     );
-    
+    */
     /****************************************************/
     
     rom_module rom
