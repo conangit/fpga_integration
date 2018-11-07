@@ -12,11 +12,13 @@ module vga_top_module
 );
     
     wire clk_40MHz;
+    wire clk_120MHz;
     
     pll_ip pll
     (
         .CLK_IN1(clk),
         .CLK_OUT1(clk_40MHz),
+        .CLK_OUT2(clk_120MHz),
         .RESET(~rst_n)
     );
     
@@ -26,6 +28,7 @@ module vga_top_module
     vga_module vga
     (
         .clk(clk_40MHz),
+        .clk_3x(clk_120MHz),
         .rst_n(rst_n),
         .hsync(HSYNC_Sig),
         .vsync(VSYNC_Sig),

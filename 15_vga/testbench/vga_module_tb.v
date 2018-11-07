@@ -23,6 +23,16 @@ module vga_module_tb();
     
     /****************************************************/
     
+    reg clk_120Mhz;
+    
+    initial
+    begin
+        clk_120Mhz = 1;
+        forever #4167 clk_120Mhz = ~clk_120Mhz; //120MHz
+    end
+    
+    /****************************************************/
+    
     wire u1_hsync;
     wire u1_vsync;
     wire [10:0] c1;
@@ -72,10 +82,11 @@ module vga_module_tb();
     
     /****************************************************/
     //步骤形式 N=7
-    
+    //此时应提高3倍该模块时钟,并设置N=1
     vga_control_1 u2
     (
-        .clk(clk),
+        // .clk(clk),
+        .clk(clk_120Mhz),
         .rst_n(rst_n),
         .c1(c1),
         .c2(c2),
@@ -116,7 +127,8 @@ module vga_module_tb();
     
     rom_module rom
     (
-        .clk(clk),
+        // .clk(clk),
+        .clk(clk_120Mhz),
         .rst_n(rst_n),
         .rom_addr(rom_addr),
         .rom_data(rom_data)

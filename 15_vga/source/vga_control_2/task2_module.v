@@ -22,6 +22,7 @@ module task2_module
         else
         begin
             rom_addr <= ((y << 4) + (x >> 3));
+            // index <= x & 3'b111;
             index_before <= x & 3'b111;
             index <= index_before;
         end

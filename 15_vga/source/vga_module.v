@@ -3,6 +3,7 @@
 module vga_module
 (
     input clk,
+    input clk_3x,
     input rst_n,
     output reg hsync,
     output reg vsync,
@@ -26,7 +27,7 @@ module vga_module
         .c2(c2)
     );
     
-    parameter Delay_N = 4'd3;
+    parameter Delay_N = 4'd2;
     reg [Delay_N-1:0] bypass_h;
     reg [Delay_N-1:0] bypass_v;
     
@@ -63,7 +64,8 @@ module vga_module
     
     vga_control_1 u2
     (
-        .clk(clk),
+        // .clk(clk),
+        .clk(clk_3x),
         .rst_n(rst_n),
         .c1(c1),
         .c2(c2),
@@ -112,7 +114,8 @@ module vga_module
     */
     
     rom_ip rom (
-        .clka(clk),         // input clka
+        // .clka(clk),         // input clka
+        .clka(clk_3x),         // input clka
         .addra(rom_addr),   // input [10 : 0] addra
         .douta(rom_data)    // output [7 : 0] douta
     );
