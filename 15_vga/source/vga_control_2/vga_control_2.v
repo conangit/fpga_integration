@@ -13,6 +13,29 @@ module vga_control_2
     wire [6:0] y;
     wire data_valid;
     
+    wire [2:0] index;
+    wire [2:0] index_del;
+    
+    /*************************************************/
+    reg data_valid_del_1;
+    reg data_valid_del_2;
+    
+    always @(posedge clk or negedge rst_n)
+    begin
+        if(~rst_n)
+        begin
+            data_valid_del_1 <= 1'b0;
+            data_valid_del_2 <= 1'b0;
+        end
+        else
+        begin
+            data_valid_del_1 <= data_valid;
+            data_valid_del_2 <= data_valid_del_1;
+        end
+    end
+    
+    /*************************************************/
+    
     //step0
     task1_module t1
     (
@@ -26,7 +49,6 @@ module vga_control_2
     );
     
     //step1
-    wire [2:0] index;
     
     task2_module t2
     (
@@ -34,23 +56,27 @@ module vga_control_2
         .rst_n(rst_n),
         .x(x),
         .y(y),
-        .data_valid(data_valid),
         .rom_addr(rom_addr),
         .index(index)
     );
     
     //step2
-    //相比vga_control_2,这里没有step2
-    //故task2_module的输出应该延时1个clk
-    
-    //step3
     task3_module t3
     (
         .clk(clk),
         .rst_n(rst_n),
+        .index_in(index),
+        .index_out(index_del)
+    );
+    
+    //step3
+    task4_module t4
+    (
+        .clk(clk),
+        .rst_n(rst_n),
         .rom_data(rom_data),
-        .data_valid(data_valid),
-        .index(index),
+        .data_valid(data_valid_del_2),
+        .index(index_del),
         .rgb(rgb)
     );
 

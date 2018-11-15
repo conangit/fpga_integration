@@ -11,7 +11,12 @@ module rom_module
         if(~rst_n)
             rom_data <= 8'h00;
         else
-            rom_data <= 8'hff;
+            case(rom_addr[0])
+            
+                0: rom_data <= 8'hFF;
+                1: rom_data <= 8'h00;
+            
+            endcase
     end
     
     
