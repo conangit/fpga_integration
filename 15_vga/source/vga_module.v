@@ -3,7 +3,7 @@
 module vga_module
 (
     input clk,
-    input clk_3x,
+    input clk_other,
     input rst_n,
     output reg hsync,
     output reg vsync,
@@ -17,7 +17,10 @@ module vga_module
     wire [10:0] c1;
     wire [10:0] c2;
     
-    vga_sync u1
+    wire [10:0] rom_addr;
+    wire [7:0] rom_data;
+    
+    vga_sync sync_mod
     (
         .clk(clk),
         .rst_n(rst_n),
@@ -27,7 +30,35 @@ module vga_module
         .c2(c2)
     );
     
-    parameter Delay_N = 4'd2;
+    rom_ip rom_mod
+    (
+        // .clka(clk),         // input clka
+        .clka(clk_other),         // input clka
+        .addra(rom_addr),   // input [10 : 0] addra
+        .douta(rom_data)    // output [7 : 0] douta
+    );
+    
+    /****************************************************/
+    
+    
+    vga_control_1 u1
+    (
+        // .clk(clk),
+        .clk(clk_other),
+        .rst_n(rst_n),
+        .c1(c1),
+        .c2(c2),
+        .rgb(rgb),
+        .rom_addr(rom_addr),
+        .rom_data(rom_data)
+    );
+    
+    
+    /****************************************************/
+    
+    
+    parameter Delay_N = 4'd4;
+    
     reg [Delay_N-1:0] bypass_h;
     reg [Delay_N-1:0] bypass_v;
     
@@ -42,42 +73,23 @@ module vga_module
         end
         else
         begin
-            bypass_h <= {bypass_h[Delay_N-2:0], u1_hsync};
-            bypass_v <= {bypass_v[Delay_N-2:0], u1_vsync};
-            hsync <= bypass_h[Delay_N-1];
-            vsync <= bypass_v[Delay_N-1];
+            // bypass_h <= {bypass_h[Delay_N-2:0], u1_hsync};
+            // bypass_v <= {bypass_v[Delay_N-2:0], u1_vsync};
+            // hsync <= bypass_h[Delay_N-1];
+            // vsync <= bypass_v[Delay_N-1];
+            
+            hsync <= u1_hsync;
+            vsync <= u1_vsync;
         end
     end
     
     
     /****************************************************/
-    wire [10:0] rom_addr;
-    wire [7:0] rom_data;
+    
+    //流水线形式(各步骤封装成模块)
     
     /*
-     * 目的:通过仿真查看rgb相比hsync,vsync慢了N个clk
-     * 则vga_sync模块的hsync,vsync需要N个bypass register
-     */
-    
-    /****************************************************/
-    //步骤形式 N=7
-    
-    vga_control_1 u2
-    (
-        // .clk(clk),
-        .clk(clk_3x),
-        .rst_n(rst_n),
-        .c1(c1),
-        .c2(c2),
-        .rgb(rgb),
-        .rom_addr(rom_addr),
-        .rom_data(rom_data)
-    );
-    
-    /****************************************************/
-    //流水线形式(各步骤封装成模块) N=2
-    /*
-    vga_control_2 u3
+    vga_control_2 u2
     (
         .clk(clk),
         .rst_n(rst_n),
@@ -88,10 +100,13 @@ module vga_module
         .rom_data(rom_data)
     );
     */
+    
     /****************************************************/
-    //流水线形式(各步骤写在一个过程块形式) N=2
+    
+    //流水线形式(各步骤写在一个过程块形式)
+    
     /*
-    vga_control_3 u4
+    vga_control_3 u3
     (
         .clk(clk),
         .rst_n(rst_n),
@@ -102,23 +117,6 @@ module vga_module
         .rom_data(rom_data)
     );
     */
-    /****************************************************/
-    /*
-    rom_module rom
-    (
-        .clk(clk),
-        .rst_n(rst_n),
-        .rom_addr(rom_addr),
-        .rom_data(rom_data)
-    );
-    */
-    
-    rom_ip rom (
-        // .clka(clk),         // input clka
-        .clka(clk_3x),         // input clka
-        .addra(rom_addr),   // input [10 : 0] addra
-        .douta(rom_data)    // output [7 : 0] douta
-    );
     
     /****************************************************/
     
