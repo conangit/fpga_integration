@@ -32,15 +32,15 @@ module vga_module
     
     rom_ip rom_mod
     (
-        // .clka(clk),         // input clka
-        .clka(clk_other),         // input clka
+        .clka(clk),         // input clka
+        // .clka(clk_other),         // input clka
         .addra(rom_addr),   // input [10 : 0] addra
         .douta(rom_data)    // output [7 : 0] douta
     );
     
     /****************************************************/
     
-    
+    /*
     vga_control_1 u1
     (
         // .clk(clk),
@@ -52,7 +52,7 @@ module vga_module
         .rom_addr(rom_addr),
         .rom_data(rom_data)
     );
-    
+    */
     
     /****************************************************/
     
@@ -78,6 +78,7 @@ module vga_module
             // hsync <= bypass_h[Delay_N-1];
             // vsync <= bypass_v[Delay_N-1];
             
+            //流水线的本质:将需要4个clk的过程"压缩"到1个clk
             hsync <= u1_hsync;
             vsync <= u1_vsync;
         end
@@ -88,7 +89,7 @@ module vga_module
     
     //流水线形式(各步骤封装成模块)
     
-    /*
+    
     vga_control_2 u2
     (
         .clk(clk),
@@ -99,7 +100,7 @@ module vga_module
         .rom_addr(rom_addr),
         .rom_data(rom_data)
     );
-    */
+    
     
     /****************************************************/
     
